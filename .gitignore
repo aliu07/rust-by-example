@@ -1,0 +1,16 @@
+# Build artifacts and dependencies
+**/target/
+
+# Remove Cargo.lock for libraries
+# Cargo.lock  # Uncomment this line if your project is a library
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.swp
+*~
+
+# OS specific files
+.DS_Store
+Thumbs.db
