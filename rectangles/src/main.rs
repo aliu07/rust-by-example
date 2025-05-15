@@ -15,6 +15,7 @@ fn main() {
         area(&rect1)
     );
 
+    // Pretty print
     println!("rect1 is {rect1:#?}");
 
     let scale = 2;
