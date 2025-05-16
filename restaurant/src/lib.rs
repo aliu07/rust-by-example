@@ -1,3 +1,9 @@
+// Many use statements...
+use std::io;
+use std::io::Write;
+// Below is equivalent
+// use std::io::{self, Write};
+
 mod front_of_house {
     // Need to add pub to module too since private by default
     // Module is only container. We also need to make its contents
