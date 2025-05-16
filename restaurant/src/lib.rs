@@ -1,30 +1,13 @@
+#![allow(unused_imports, dead_code)]
 // Many use statements...
 use std::io;
 use std::io::Write;
 // Below is equivalent
 // use std::io::{self, Write};
 
-mod front_of_house {
-    // Need to add pub to module too since private by default
-    // Module is only container. We also need to make its contents
-    // i.e. specific functions public if we want to access them
-    // from other modules
-    pub mod hosting {
-        // This function is accessible
-        pub fn add_to_waitlist() {}
+mod front_of_house;
 
-        // This function is private by default
-        fn seat_at_table() {}
-    }
-
-    mod serving {
-        fn take_order() {}
-
-        fn serve_order() {}
-
-        fn take_payment() {}
-    }
-}
+pub use crate::front_of_house::hosting;
 
 fn deliver_order() {}
 
