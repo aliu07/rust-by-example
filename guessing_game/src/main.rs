@@ -16,13 +16,18 @@ fn main() {
             .read_line(&mut guess)
             .expect("Failed to read line");
 
-        let guess: u32 = match guess.trim().parse() {
+        let guess: i32 = match guess.trim().parse() {
             Ok(num) => num,
             Err(_) => {
                 println!("Please type a number!");
                 continue;
             }
         };
+
+        if guess < 1 || guess > 100 {
+            println!("The number is between 1 and 100.");
+            continue;
+        }
 
         println!("You guessed: {guess}");
 
