@@ -2,6 +2,29 @@ use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
 
+// Create custom struct to avoid having to perform
+// validation on value (ensuring in [1, 100] range)
+// in every single function. If instead we receive
+// a Guess struct, we know for a fact the value is
+// valid with how the new() function is defined.
+struct Guess {
+    value: i32,
+}
+
+impl Guess {
+    fn new(value: i32) -> Guess {
+        if value < 1 || value > 100 {
+            panic!("The number has to be between 1 and 100.");
+        }
+
+        Guess { value }
+    }
+
+    fn get_value(&self) -> i32 {
+        self.value
+    }
+}
+
 fn main() {
     println!("Guess the number!");
 
@@ -24,14 +47,11 @@ fn main() {
             }
         };
 
-        if guess < 1 || guess > 100 {
-            println!("The number is between 1 and 100.");
-            continue;
-        }
+        let guess = Guess::new(guess);
 
-        println!("You guessed: {guess}");
+        println!("You guessed: {}", guess.get_value());
 
-        match guess.cmp(&secret_number) {
+        match guess.get_value().cmp(&secret_number) {
             Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
