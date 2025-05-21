@@ -1,8 +1,10 @@
 #![allow(dead_code)]
 
 mod cons_list;
+mod custom_smart_ptr;
 mod my_box;
 
+use custom_smart_ptr::CustomSmartPointer;
 use my_box::MyBox;
 
 fn hello(name: &str) {
@@ -49,4 +51,37 @@ fn main() {
     // coercions is harder to read, write, and understand with all of these
     // symbols involved. Deref coercion allows Rust to handle these conversions
     // for us automatically.
+
+    // Example for drop trait
+    {
+        let _c = CustomSmartPointer {
+            data: String::from("some stuff"),
+        };
+
+        // _c.drop();
+        // Manual drops are not allowed! If we manually drop here, the compiler
+        // would also drop when _c goes out of scope. This would cause a double
+        // free error!
+
+        let _d = CustomSmartPointer {
+            data: String::from("other stuff"),
+        };
+    } // _c and _d go out of scope here, should see a println
+    // Notice the order of drops, _d is dropped before _c
+    // Dropping goes in reverse order of creation!
+
+    {
+        // Instead of manually calling the method drop (from the Drop trait),
+        // we can call a built-in force-drop function included in the prelude.
+        // This method is technically under the std::mem::drop namespace.
+        let n = CustomSmartPointer {
+            data: String::from("more data"),
+        };
+
+        // This method still calls the code in the drop method of CustomSmartPointer,
+        // so we will see a println.
+        drop(n);
+
+        println!("CustomSmartPointer dropped before end of scope!");
+    }
 }
