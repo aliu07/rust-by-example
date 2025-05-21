@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
 mod cons_list;
+mod cons_list_rc;
 mod custom_smart_ptr;
 mod my_box;
 
@@ -84,4 +85,7 @@ fn main() {
 
         println!("CustomSmartPointer dropped before end of scope!");
     }
+
+    // Rc<T> examples
+    cons_list_rc::cons_list_rc_example();
 }
