@@ -5,6 +5,8 @@ mod cons_list_rc;
 mod cons_list_rc_with_refcell;
 mod custom_smart_ptr;
 mod my_box;
+mod reference_cycle;
+mod tree;
 
 use custom_smart_ptr::CustomSmartPointer;
 use my_box::MyBox;
@@ -92,4 +94,10 @@ fn main() {
 
     // Rc<T> with RefCell<T> example
     cons_list_rc_with_refcell::cons_list_rc_with_refcell_example();
+
+    // Reference cycle example
+    reference_cycle::reference_cycle_example();
+
+    // Still on the theme of reference cycles & weak vs strong refs
+    tree::tree_example();
 }
