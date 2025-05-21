@@ -1,6 +1,7 @@
 // See Figure 15-3: https://doc.rust-lang.org/book/ch15-04-rc.html#using-rct-to-share-data
 
 pub enum List {
+    // Allows multiple owners for each Cons!
     Cons(i32, Rc<List>),
     Nil,
 }
