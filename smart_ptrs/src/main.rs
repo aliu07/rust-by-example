@@ -2,6 +2,7 @@
 
 mod cons_list;
 mod cons_list_rc;
+mod cons_list_rc_with_refcell;
 mod custom_smart_ptr;
 mod my_box;
 
@@ -86,6 +87,9 @@ fn main() {
         println!("CustomSmartPointer dropped before end of scope!");
     }
 
-    // Rc<T> examples
+    // Rc<T> example
     cons_list_rc::cons_list_rc_example();
+
+    // Rc<T> with RefCell<T> example
+    cons_list_rc_with_refcell::cons_list_rc_with_refcell_example();
 }
