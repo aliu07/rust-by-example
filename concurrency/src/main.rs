@@ -1,4 +1,4 @@
-use std::sync::mpsc;
+use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
 use std::time::Duration;
 
@@ -12,6 +12,10 @@ fn main() {
     sending_multiple_messages_example();
     println!("=================================");
     multiple_producers_example();
+    println!("=================================");
+    mutex_syntax_example();
+    println!("=================================");
+    sharing_mutex_example();
 }
 
 fn interleaved_example() {
@@ -128,4 +132,46 @@ fn multiple_producers_example() {
     for received in rx {
         println!("Got: {received}");
     }
+}
+
+fn mutex_syntax_example() {
+    let m = Mutex::new(5);
+
+    {
+        // lock() returns a smart ptr called MutexGuard
+        let mut num = m.lock().unwrap();
+        *num = 6;
+    } // The smart ptr also has a Drop implementation that releases
+    // the loack automatically when a MutexGuard goes out of scope
+
+    println!("m = {m:?}");
+}
+
+fn sharing_mutex_example() {
+    // 'counter' is reminescent of the interior mutability pattern.
+    // 'counter' is immutable, but we could get a mutable reference
+    // to the value inside it.
+    // Similar to Rc where we can run into memory leaks, we can cause deadlocks
+    // if we don't manage our mutexes well.
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    // Spawn 10 threads
+    for _ in 0..10 {
+        // Can't use Rc here, but we can use Arc!
+        // Arc = Atomic reference counter --> It's thread safe!
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+            *num += 1;
+        });
+
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
 }
