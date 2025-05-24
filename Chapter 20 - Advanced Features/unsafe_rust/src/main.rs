@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 // To switch to unsafe Rust, use the unsafe keyword and then start a new block
 // that holds the unsafe code. You can take five actions in unsafe Rust that
 // you can’t in safe Rust, which we call unsafe superpowers. Those superpowers
@@ -10,6 +12,11 @@
 
 use std::slice;
 
+// Static vars can only store refs with the 'static lifetime
+// Declare static vars in SCREAMING_SNAKE_CASE
+static HELLO_WORLD: &str = "Hello, world!";
+static mut COUNTER: u32 = 0;
+
 fn main() {
     unsafe_ptrs_example();
 
@@ -19,6 +26,17 @@ fn main() {
     }
 
     creating_safe_abstraction_over_unsafe_code_example();
+
+    // static var examples
+    println!("name is: {HELLO_WORLD}");
+
+    unsafe {
+        // SAFETY: This is only called from a single thread in `main`.
+        add_to_count(3);
+        // The compiler will not allow you to create references to a mutable static variable.
+        // You can only access it via a raw pointer, created with one of the raw borrow operators.
+        println!("COUNTER: {}", *(&raw const COUNTER));
+    }
 }
 
 // Different from references and smart pointers, raw pointers:
@@ -85,4 +103,25 @@ fn creating_safe_abstraction_over_unsafe_code_example() {
 
     assert_eq!(a, &mut [1, 2, 3]);
     assert_eq!(b, &mut [4, 5, 6]);
+}
+
+// Whenever we perform an unsafe operation, it is idiomatic to write a comment
+// starting with SAFETY to explain how the safety rules are upheld.
+//
+/// SAFETY: Calling this from more than a single thread at a time is undefined
+/// behavior, so you *must* guarantee you only call it from a single thread at
+/// a time.
+unsafe fn add_to_count(inc: u32) {
+    unsafe {
+        COUNTER += inc;
+    }
+}
+
+// Implementing an unsafe trait
+unsafe trait Foo {
+    // methods go here
+}
+
+unsafe impl Foo for i32 {
+    // method implementations go here
 }
