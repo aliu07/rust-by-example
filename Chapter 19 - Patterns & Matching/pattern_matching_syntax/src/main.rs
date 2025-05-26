@@ -159,7 +159,8 @@ fn main() {
     match num {
         Some(x) if x % 2 == 0 => println!("The number {x} is even"),
         Some(x) => println!("The number {x} is odd"),
-        None => (),
+        // None case
+        _ => (),
     }
 
     // We can use match guards to bypass the shadowing related to y
